@@ -58,7 +58,7 @@ func (r *deviceTokenRepo) Upsert(ctx context.Context, d *model.DeviceToken) erro
 	_, err := r.col.UpdateOne(ctx,
 		bson.M{"user_id": d.UserID, "token": d.Token},
 		bson.M{"$set": d},
-		&mongo.UpdateOptions{Upsert: boolPtr(true)},
+		options.UpdateOne().SetUpsert(true),
 	)
 	return err
 }
@@ -79,7 +79,7 @@ func (r *preferencesRepo) Upsert(ctx context.Context, p *model.Preferences) erro
 	_, err := r.col.UpdateOne(ctx,
 		bson.M{"user_id": p.UserID},
 		bson.M{"$set": p},
-		&mongo.UpdateOptions{Upsert: boolPtr(true)},
+		options.UpdateOne().SetUpsert(true),
 	)
 	return err
 }
@@ -92,5 +92,3 @@ func (r *preferencesRepo) FindByUserID(ctx context.Context, userID bson.ObjectID
 	}
 	return &p, nil
 }
-
-func boolPtr(b bool) *bool { return &b }
